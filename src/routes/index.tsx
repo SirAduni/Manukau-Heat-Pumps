@@ -191,15 +191,19 @@ function QuoteCard() {
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", suburb: "", type: "Residential" });
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const subject = encodeURIComponent(`Heat pump quote request — ${form.name}`);
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nPhone: ${form.phone}\nSuburb: ${form.suburb}\nType: ${form.type}`
-    );
-    window.location.href = `mailto:info@manukauheatpumps.co.nz?subject=${subject}&body=${body}`;
-    setSent(true);
-  };
+const submit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  await fetch("https://formspree.io/f/xdareqjl", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(form),
+  });
+
+  setSent(true);
+};
 
   return (
     <div id="quote" className="rounded-2xl bg-card text-card-foreground shadow-[var(--shadow-elegant)] p-6 sm:p-7 border border-border">
